@@ -3,14 +3,12 @@
 Base URL: `/api/v1`
 
 ## Authentication
-Hybrid strategy:
-- Checkout flow auto-register endpoint creates customer + Sanctum token.
-- Login endpoint supports traditional credentials.
-- JWT interoperability can be added by issuing JWT in AuthController alongside Sanctum token.
+Hybrid pattern:
+- `POST /auth/checkout-register` for automatic customer account creation during checkout.
+- `POST /auth/login` for standard credential login.
+- Sanctum token auth is required for protected customer/admin routes.
 
 ### POST `/auth/checkout-register`
-Auto-create or fetch user during checkout.
-
 Request:
 ```json
 { "email": "user@example.com", "name": "optional" }
@@ -20,64 +18,82 @@ Response:
 { "user": { "id": 1, "email": "user@example.com" }, "token": "..." }
 ```
 
-### POST `/auth/login`
-Credential login.
-
-## Product APIs
+## Storefront APIs
 ### GET `/products`
-Filter query params:
+Supports filtering with:
 - `category_id`
 - `brand_id`
 - `min_price`
 - `max_price`
 
 ### GET `/products/{id}`
-Single product details.
+Product detail.
 
-### POST `/admin/products`
-Admin create product.
+### GET `/faqs`
+Active FAQ list.
 
-## Order APIs
+### POST `/contacts`
+Create contact message.
+
+### POST `/newsletter/subscribe`
+Subscribe email to newsletter.
+
+### GET `/banners`
+Public slider/banner feed.
+
+## Orders & Tracking
 ### POST `/orders`
-Create order with methods `COD`, `STRIPE`, `SSLCOMMERZ`.
-
-Payload:
-```json
-{
-  "user_id": 1,
-  "payment_method": "COD",
-  "shipping_address": {"line1": "...", "city": "..."},
-  "total": 199.99
-}
-```
+Create order with payment methods:
+- `COD`
+- `STRIPE`
+- `SSLCOMMERZ`
 
 ### GET `/orders/history` (auth)
-Returns paginated user order history.
+Customer order history.
 
 ### GET `/orders/{order}/track` (auth)
-Returns live timeline: processing → shipped → out_for_delivery → delivered.
+Tracking timeline:
+- processing
+- shipped
+- out_for_delivery
+- delivered
 
 ## Notifications
 ### GET `/notifications` (auth)
-User system and order alerts.
+Customer notifications feed.
 
-## Admin APIs
-Protected by `role:super_admin,sub_admin` middleware.
+## Live Chat
+### GET `/chat/messages` (auth)
+Get last 50 chat messages for customer.
 
+### POST `/chat/messages` (auth)
+Create user → admin message.
+
+## Admin APIs (`role:super_admin,sub_admin`)
 ### GET `/admin/dashboard`
-Metrics: total sales, order count, product count, pending orders.
+Sales, order count, product count, pending order count.
+
+### Resource `/admin/products`
+Create/update/delete products.
 
 ### POST `/admin/orders/{order}/status`
-Update timeline status.
+Update order status in timeline.
 
-## Real-time channels (recommended)
-Use Laravel Echo + WebSockets/SSE for:
-- Order tracking live updates
-- Chat message stream user ↔ admin
-- Notification push
+### GET `/admin/contacts`
+List contact messages.
 
-## Security
-- Request validation on all mutating endpoints
-- Sanctum token auth
-- Rate limiting via Laravel throttle middleware
-- Role middleware for admin segmentation
+### GET `/admin/newsletter/subscribers`
+List newsletter subscribers.
+
+### POST `/admin/faqs`
+Create FAQ item.
+
+## Super Admin APIs (`role:super_admin`)
+### POST `/super-admin/banners`
+Create slider/banner entry.
+
+## Security Checklist
+- Validation on all write endpoints.
+- Sanctum token auth.
+- Role middleware for admin controls.
+- Rate limiting should be enabled via Laravel throttle middleware in production.

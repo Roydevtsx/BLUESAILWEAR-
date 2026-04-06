@@ -1,25 +1,29 @@
 # BLUESAILWEAR
 
-Production-ready full-stack eCommerce reference implementation.
+Production-focused full-stack eCommerce implementation.
 
 ## Stack
 - Frontend: React + Tailwind + Framer Motion
-- Backend: Laravel REST API + Sanctum/JWT-ready auth pattern
+- Backend: Laravel REST API + Sanctum authentication + role middleware
 - Database: MySQL
 
 ## Monorepo structure
-- `frontend/` React storefront
-- `backend/` Laravel API source layout
-- `docs/` API docs, DB schema, setup & deployment
+- `frontend/` React storefront and admin UI modules
+- `backend/` Laravel API source layout and payment integrations
+- `docs/` API docs, SQL schema, setup & deployment instructions
 
-## Key features delivered
-- Premium animated storefront (glassmorphism UI, transparent nav, hero, promo popup)
-- Shopping features (advanced filters, grid/list toggle, wishlist, cart, product details gallery)
-- Checkout with auto-user creation flow and payment method selection (COD, Stripe, SSLCommerz)
-- Auth-guarded pages for checkout-adjacent private views (tracking/history/profile)
-- Live chat widget, FAQ, contact form, notifications
-- Backend modules for products, orders, tracking, admin analytics, payment services scaffolding
-- MySQL schema migration for commerce + content + communication domains
+## Implemented features
+- Premium animated UI (glassmorphism, transparent navbar, hero motion, promo popup)
+- Pages: Home, Shop, Product Details, Cart, Checkout, Order Tracking, Order History, Profile, Contact, FAQ, Admin
+- Shop system: category/sub-category/brand/price/rating filters + grid/list toggle
+- Product details: gallery + zoom-style interaction + variants
+- Wishlist, notifications center, newsletter subscription, contact form, live chat widget
+- Checkout auth logic: no login for browsing/cart, auto-account creation on checkout, protected order/profile pages
+- Payments in checkout and backend order flow: COD, Stripe stub, SSLCommerz stub
+- Live tracking stages: Processing → Shipped → Out for Delivery → Delivered
+- Backend modules for products, orders/items, FAQ, contact, newsletter, chat, banners, admin analytics
+- Role system: super_admin and sub_admin route segmentation
+- Documentation for API, DB schema, and deployment
 
-## Start quickly
+## Quick start
 See `docs/SETUP_DEPLOYMENT.md`.

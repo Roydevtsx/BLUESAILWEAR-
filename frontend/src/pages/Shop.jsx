@@ -3,13 +3,14 @@ import ProductCard from '../components/ProductCard';
 import { products } from '../data/mockData';
 
 export default function Shop() {
-  const [filters, setFilters] = useState({ category: 'All', brand: 'All', maxPrice: 999, rating: 0 });
+  const [filters, setFilters] = useState({ category: 'All', subCategory: 'All', brand: 'All', maxPrice: 999, rating: 0 });
   const [listMode, setListMode] = useState(false);
 
   const filtered = useMemo(
     () =>
       products.filter((p) =>
         (filters.category === 'All' || p.category === filters.category) &&
+        (filters.subCategory === 'All' || p.subCategory === filters.subCategory) &&
         (filters.brand === 'All' || p.brand === filters.brand) &&
         p.price <= filters.maxPrice &&
         p.rating >= filters.rating,
@@ -22,6 +23,9 @@ export default function Shop() {
       <div className="glass flex flex-wrap gap-3 rounded-2xl p-4">
         <select onChange={(e) => setFilters((f) => ({ ...f, category: e.target.value }))} className="rounded bg-slate-900 px-3 py-2">
           <option>All</option><option>Clothes</option><option>Shoes</option><option>Jewelry</option>
+        </select>
+        <select onChange={(e) => setFilters((f) => ({ ...f, subCategory: e.target.value }))} className="rounded bg-slate-900 px-3 py-2">
+          <option>All</option><option>Shirt</option><option>Dress</option><option>Sneakers</option><option>Formal</option><option>Necklace</option><option>Ring</option>
         </select>
         <select onChange={(e) => setFilters((f) => ({ ...f, brand: e.target.value }))} className="rounded bg-slate-900 px-3 py-2">
           <option>All</option><option>BlueSail Signature</option><option>Tide Motion</option><option>Moon Pearl</option>
